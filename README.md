@@ -1,5 +1,5 @@
 <<<<<<< HEAD
-# hehe
+# zaojiao
 
 > A Vue.js project
 
@@ -18,8 +18,4 @@ npm run build
 # build for production and view the bundle analyzer report
 npm run build --report
 ```
-
-For a detailed explanation on how things work, check out the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
-=======
-# zaojiao
->>>>>>> d0e349550ccd93815b88122acaeedae07a78c20e
+使用vue全家桶加vux ui框架搭建的教育类微信单页应用.
