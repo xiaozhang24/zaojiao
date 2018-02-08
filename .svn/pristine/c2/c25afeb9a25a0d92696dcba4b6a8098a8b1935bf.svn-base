@@ -1,0 +1,26 @@
+<template>
+  <div id="app">
+    <router-view></router-view>
+  </div>
+</template>
+
+<script>
+import Tab from './components/tab/tab'
+import {Group, Cell} from 'vux'
+import '@/assets/common/less/ionicons.less'
+const url ="api/master/Index/index"
+export default {
+  name: 'app',
+  components: {
+  	Tab,Group,Cell
+  }
+}
+</script>
+
+<style lang="less">
+@import '~vux/src/styles/reset.less';
+
+body {
+  background-color: #fbf9fe;
+}
+</style>

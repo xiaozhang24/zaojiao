@@ -1,0 +1,38 @@
+<template>
+  <div id="app">
+    <router-view></router-view>
+  </div>
+</template>
+
+<script>
+import '@/assets/common/less/ionicons.less'
+import http from '@/assets/common/js/https'
+export default {
+   created() {
+     console.log(2222);
+   },
+   methods: {
+       init(){
+           this.apiPost(url,data).then((res)=>{
+        if (res.code === 200){
+          store.commit('setLogin', true)
+
+          Lockr.set('token', res.employee.token)
+          this.setUsers({users: this.username})
+          Fn.shallowRefresh('/')
+        } else {
+          this.$vux.toast.show({text: res.msg, type: 'warn'})
+        }
+       })
+       }
+   }
+}
+</script>
+
+<style lang="less">
+@import '~vux/src/styles/reset.less';
+
+body {
+  background-color: #fbf9fe;
+}
+</style>

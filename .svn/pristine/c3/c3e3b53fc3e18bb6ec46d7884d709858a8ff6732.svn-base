@@ -1,0 +1,7 @@
+const state = {
+	users: '111',
+	isLoading: false,
+	token: false
+}
+
+export default state

@@ -1,0 +1,86 @@
+<template>
+  <div class="login">
+    <group>
+      <x-input title="登录账号" v-model="username" placeholder="请输入账号" keyboard="number" is-type="china-mobile"></x-input>
+    </group>
+    <group>
+      <x-input title="密码" v-model="password" placeholder="请输入密码"></x-input>
+    </group>
+    <group>
+      <box>
+        <x-button  @click.native="handleSubmit()" :gradients="['#1D62F0', '#19D5FD']">登录</x-button>
+         <x-button  :gradients="['#A644FF', '#FC5BC4']">注册</x-button>
+      </box>
+    </group>
+    <!-- <loading v-model="isLoading"></loading> -->
+  </div>
+</template>
+
+<script>
+import {XButton, Box, Group, XInput, querystring, Loading} from 'vux'
+import http from '@/assets/common/js/https'
+import store from '@/vuex/store'
+import {mapActions, mapGetters} from 'vuex'
+const url = "/api/Account/login"
+export default {
+  mixins: [http],
+  data() {
+    return {
+      username: '',
+      password: '',
+      warningTest: '账号或密码不能为空'
+    }
+  },
+  computed:{
+    ...mapGetters([
+      'isLoading'
+      ])
+  },
+  methods: {
+    ...mapActions([
+      'setUsers'
+    ]),
+    handleSubmit(){
+      var username = this.username
+      var password = this.password
+      if (username === '' && password === '') {
+        this.$vux.toast.show({
+          text: this.warningTest,
+          type: 'warn'
+        })
+        return
+      }
+      let data ={
+        username:this.username,
+        password:this.password
+      }
+       this.apiPost(url,data).then((res)=>{
+        if (res.code === 200){
+          store.commit('setToken', res.employee.token)
+          Lockr.set('token', res.employee.token)
+          this.setUsers({users: this.username})
+          Fn.shallowRefresh('/')
+        }
+       })
+    }
+  },
+  components: {
+    Group,
+    XButton,
+    XInput,
+    Box,
+    Loading
+  }
+}
+</script>
+
+<style lang="less">
+  .login{
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 100%;
+    padding: 10px;
+  }
+
+</style>

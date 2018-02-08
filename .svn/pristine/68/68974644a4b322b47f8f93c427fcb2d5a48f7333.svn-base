@@ -1,0 +1,91 @@
+import Vue from 'vue'
+import Lockr from 'lockr'
+import VueRouter from 'vue-router'
+import store from '@/vuex/store'
+import Home from '@/components/home/home'
+import News from '@/components/home/news'
+import Apps from '@/components/home/apps'
+import Mail from '@/components/home/mail'
+import Me from '@/components/home/me'
+import Login from '@/components/login/login'
+import Refresh from '@/components/base/refresh'
+
+
+const routes = [
+	{
+	path: '/login',
+	component: Login
+	},
+ 	{
+	path: '/',
+	component: Home,
+	meta: {
+		requireAuth: true
+	},
+	children: [{
+		path: '/home/news',
+		meta: {
+			requireAuth: true
+		},
+		component: News
+	}, {
+		path: '/home/apps',
+		meta: {
+			requireAuth: true
+		},
+		component: Apps
+	}, {
+		path: '/home/mail',
+		meta: {
+			requireAuth: true
+		},
+		component: Mail
+	}, {
+		path: '/home/me',
+		meta: {
+			requireAuth: true
+		},
+		component: Me
+	}]
+}, {
+	path: '/refresh',
+	component: Refresh
+}]
+
+Vue.use(VueRouter)
+const router = new VueRouter({
+	mode: 'history',
+	routes
+})
+const token = Lockr.get('token')
+
+if (token) {
+	console.log(token)
+	store.state.token = !store.state.token
+	
+	
+}
+router.beforeEach((to, from, next) => {
+	if (to.meta.requireAuth){
+		if (store.state.token) {
+			store.commit('setLoading', true)
+			next();
+		} else {
+			next({
+				path:'/login'
+			})
+		}
+	}
+	else{
+		if (store.state.token) {
+			if (to.path == '/login') {	
+		      router.replace({ name: router.history.path })
+		    } 
+		} else {
+			next()
+		}	
+	}
+	
+})
+
+export default router

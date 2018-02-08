@@ -1,0 +1,56 @@
+<template>
+  <div id="app">
+    <router-view></router-view>
+    <loading v-model="isLoading"></loading>
+  </div>
+</template>
+
+<script>
+import '@/assets/common/less/ionicons.less'
+import axios from 'axios'
+import http from '@/assets/common/js/https'
+import {mapGetters} from 'vuex'
+import { Loading} from 'vux'
+
+export default {
+
+   created() {
+     
+   },
+   computed:{
+	  ...mapGetters([
+	    'isLoading'
+	  ])
+   },
+    mounted() {
+		setTimeout(() => {
+		  store.state.isLoading = false
+		},2000)
+	 },
+   methods: {
+       init(){
+           this.apiPost(url,data).then((res)=>{
+        if (res.code === 200){
+          store.commit('setLogin', true)
+          Lockr.set('token', res.employee.token)
+          this.setUsers({users: this.username})
+          Fn.shallowRefresh('/')
+        } else {
+          this.$vux.toast.show({text: res.msg, type: 'warn'})
+        }
+       })
+       }
+   },
+   components: {
+   	 Loading
+   }
+}
+</script>
+
+<style lang="less">
+@import '~vux/src/styles/reset.less';
+
+body {
+  background-color: #fbf9fe;
+}
+</style>

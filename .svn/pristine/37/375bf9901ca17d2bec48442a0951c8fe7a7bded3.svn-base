@@ -1,0 +1,105 @@
+<template>
+  <div class="tab">
+      <tabbar>
+          <tabbar-item selected link="/news">
+              <i slot="icon" class="ion-chatbubble"></i>
+              <span slot="label">消息</span>
+          </tabbar-item>
+          <tabbar-item link="apps">
+            <i slot="icon" class="ion-android-apps"></i>
+            <span slot="label">应用</span>
+          </tabbar-item >
+            <div class="circle-wrapper">
+              <div class="circle-btn">
+              <i slot="icon" class="ion-plus-round"></i>
+            </div>
+          </div>
+          <tabbar-item link="/mail">
+              <i slot="icon" class="ion-android-contacts"></i>
+              <span slot="label">通讯录</span>
+          </tabbar-item>
+          <tabbar-item link="/me">
+              <i slot="icon" class="ion-android-person"></i>
+              <span slot="label">我</span>
+          </tabbar-item>
+      </tabbar> 
+  </div>
+</template>
+
+<script>
+import { Group, Cell , XHeader, Tabbar, TabbarItem,Icon} from 'vux'
+import { XDialog,  TransferDomDirective as TransferDom } from 'vux'
+export default {
+  directives: {
+    TransferDom
+  },
+  components: {
+    Group,
+    Cell,
+    XHeader,
+    Tabbar,
+    TabbarItem,
+    XDialog,
+    Icon
+  },
+  data () {
+    return {
+      msg: 'Hello World!',
+      showHideOnBlur: false
+      }
+    },
+    methods: {
+      toggleDialog(){
+
+      }
+    }
+}
+</script>
+
+<style lang="less">
+  .circle-wrapper{
+    position:relative;
+    .circle-btn{
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      color: #09BB07;
+      border:1px solid #09BB07;
+      margin: 10px 20px 0;
+      text-align: center;
+      line-height: 32px;
+      i{
+        font-size:24px;
+      }
+    }
+  }
+  .weui-tabbar__icon{
+    top:-4px;
+  }
+ .vux-close {
+    margin-top: 8px;
+    margin-bottom: 8px;
+    position: relative;
+    display: inline-block;
+    vertical-align: middle;
+    color: #999;
+    width: 24px;
+    height: 24px;
+    &:before,&:after{
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 11px;
+      width: 24px;
+      height: 1px;
+      background-color: currentColor;
+      -webkit-transform: rotate(-45deg);
+      transform: rotate(-45deg);
+    }
+    &:after{
+      -webkit-transform: rotate(45deg);
+      transform: rotate(45deg);
+    }
+  }
+
+</style>

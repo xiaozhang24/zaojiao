@@ -1,0 +1,42 @@
+import axios from 'axios'
+import store from '@/vuex/store'
+import router from './router'
+import Lockr from 'lockr'
+// axios 配置
+axios.defaults.timeout = 1000 * 15
+
+// http request拦截器
+axios.interceptors.request.use(
+	config => {
+		if (store.state.token) {
+			config.headers.token =  Lockr.get('token');
+		}
+		return config
+	},
+	error => {
+		return Promise.reject(err)
+	})
+
+// http response拦截器
+axios.interceptors.response.use(
+    response => {
+        return response;
+    },
+    error => {
+        console.log(error)
+        if (error) {
+            switch (error.code) {
+                case 401:
+                    // 401 清除token信息并跳转到登录页面
+                    // store.commit(types.LOGOUT);
+                    router.replace({
+                        path: '/login'
+                    })
+                    break
+            }
+        }
+        // console.log(JSON.stringify(error));//console : Error: Request failed with status code 402
+        return Promise.reject(error.data)
+    });
+
+export default axios

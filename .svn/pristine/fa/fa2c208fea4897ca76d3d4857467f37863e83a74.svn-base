@@ -1,0 +1,58 @@
+<template>
+  <div class="home">
+  	<router-view></router-view>
+  	<tab></tab>
+	<loading v-model="isLoading"></loading>
+  </div>
+</template>
+
+<script>
+import Tab from '@/components/tab/tab'
+import { Group, Cell, Loading} from 'vux'
+import {mapGetters} from 'vuex'
+import store from '@/vuex/store'
+import Http from '@/assets/common/js/https'
+
+const url = "api/master/Index/upload"
+export default {
+ mixins: [Http],
+ computed:{
+    ...mapGetters([
+      'isLoading'
+    ])
+ },
+ methods: {
+    checkLogin() {
+        console.log(store.get(isLogin));
+        if (store.state.isLogin) {
+            var token = Lockr.get('token');
+	        this.apiPost('/api/Account/checkLogin').then((res)=>{
+		        if (res.code !== 100){
+		            Fn.shallowRefresh('/Login')
+		        }
+	        })
+        } else {
+            Fn.shallowRefresh('/Login') 
+        }
+    },
+ },
+ created() {
+    this.checkLogin();
+ },
+ mounted() {
+	setTimeout(() => {
+	  store.state.isLoading = false
+	},1000)
+ },
+ components: {
+ 	Tab,
+    Group,
+    Cell,
+    Loading
+  },
+}
+</script>
+
+<style lang="less">
+
+</style>

@@ -1,0 +1,35 @@
+<template>
+  <div class="me">
+  	444444444444
+  </div>
+</template>
+
+<script>
+import { Group, Cell, Loading} from 'vux'
+import {mapGetters} from 'vuex'
+import store from '@/vuex/store'
+
+const url = "api/master/Index/upload"
+export default {
+
+ mounted() {
+	setTimeout(() => {
+	  store.state.isLoading = false
+	},1000)
+ },
+ components: {
+    Group,
+    Cell,
+    Loading
+  },
+}
+</script>
+
+<style lang="less">
+	.news{
+		position: fixed;
+		top: 0;
+		bottom: 50px;
+		width:100%;
+	}
+</style>

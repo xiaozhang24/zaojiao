@@ -1,0 +1,95 @@
+import Vue from 'vue'
+import Lockr from 'lockr'
+import VueRouter from 'vue-router'
+import store from '@/vuex/store'
+import Index from '@/components/Index'
+import Home from '@/components/home/home'
+import News from '@/components/home/news'
+import Apps from '@/components/home/apps'
+import Mail from '@/components/home/mail'
+import Me from '@/components/home/me'
+import Login from '@/components/login/login'
+import Refresh from '@/components/base/refresh'
+import rules from '@/components/rules/ruleList'
+
+
+const routes = [
+	{
+	path: '/login',
+	component: Login
+	},
+ 	{
+	path: '/',
+	redirect: 'Apps',
+	component: Index,
+	meta: {
+		requireAuth: true
+	},
+	children: [{
+		path: '/news',
+		name: 'news',
+		meta: {
+			requireAuth: true
+		},
+		component: News
+	}, {
+		path: '/apps',
+		name: 'apps',
+		meta: {
+			requireAuth: true
+		},
+		component: Apps,
+		children: [ //二级路由
+            {
+            	path: '/apps/rules',
+            	meta: {
+            		requireAuth: true
+            	},
+            	components: rules
+            }
+		]
+	}, {
+		path: '/mail',
+		name: 'mail',
+		meta: {
+			requireAuth: true
+		},
+		component: Mail
+	}, {
+		path: '/me',
+		name: 'me',
+		meta: {
+			requireAuth: true
+		},
+		component: Me
+	}]
+}, {
+	path: '/refresh',
+	component: Refresh
+}]
+
+Vue.use(VueRouter)
+const router = new VueRouter({
+	mode: 'history',
+	routes
+})
+var token = Lockr.get('token');
+if (token) {
+	store.state.isLogin = !store.state.isLogin;
+}
+router.beforeEach((to, from, next) => {
+
+	if (store.state.isLogin) {
+		if (to.path == '/login') {	
+		    router.replace({ name: router.history.path })
+		} else {
+			next()
+		}
+	} else {
+		next({
+			path:'/login'
+		})
+	}
+})
+
+export default router

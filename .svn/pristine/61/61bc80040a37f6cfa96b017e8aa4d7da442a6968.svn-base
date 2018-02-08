@@ -1,0 +1,13 @@
+const mutations = {
+  setUsers(state, users) {
+    state.users = users
+  },
+  setLoading(state, flag) {
+    state.isLoading = flag
+  },
+  setToken(state, data) {
+  	state.token = data
+  }
+}
+
+export default mutations

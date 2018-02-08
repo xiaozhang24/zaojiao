@@ -1,0 +1,44 @@
+import axios from 'axios'
+import store from '@/vuex/store'
+import router from './router'
+import Lockr from 'lockr'
+// axios 配置
+axios.defaults.timeout = 1000 * 15
+
+// http request拦截器
+axios.interceptors.request.use(
+        config => {
+            if (store.state.isLogin) {
+                config.headers['X-Requested-With'] = 'XMLHttpRequest'
+                config.headers.token = Lockr.get('token')
+            } else {
+                router.replace({
+                    path: '/login'
+                })
+            }
+            return config
+        },
+        error => {
+                return Promise.reject(error.data)
+        });
+
+        // http response拦截器
+        axios.interceptors.response.use(
+            response => {
+                if (response.data.code != 100) {
+                    store.commit('setLogin', false);
+                    router.replace({
+                        path: '/login'
+                    })
+                }
+                return response;
+            },
+            error => {
+                return Promise.reject(error.data)
+            });
+
+        if (store.state.isLogin) {
+            axios.post('/api/Account/checkLogin').then((response) => {})
+        }
+
+        export default axios
